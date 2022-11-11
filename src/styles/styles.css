@@ -1,0 +1,19 @@
+.banner {
+  background-image: url('../asests/img/banner-img.jpg');
+  background-repeat: no-repeat;
+  background-position: top;
+  height: 50vh;
+  width: 100%;
+  border-radius: 0 0 0 50px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.content-container {
+  position: absolute;
+  bottom: -300px;
+}

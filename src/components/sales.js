@@ -35,25 +35,29 @@ export default function Sales() {
       <Paper sx={{ padding: '40px' }}>
         <Grid container spacing={4}>
           {sales.map((sale) => {
+            const { flavor, nicotineLevel, image, price } = sale;
             return (
               <Grid item>
                 <Card sx={{ maxWidth: 345 }}>
                   <CardMedia
                     component="img"
                     height="190"
-                    image={`${sale.image}`}
-                    alt={`${sale.item}`}
+                    image={`${image}`}
+                    alt={`${sale.flavor}`}
                   />
                 </Card>
                 <CardContent>
                   <Typography sx={{ fontSize: '12px', fontWeight: 'bold' }}>
-                    {sale.item}
+                    {flavor}
                   </Typography>
                   <Typography sx={{ fontSize: '11px', fontWeight: 'bold' }}>
-                    {sale.price}.00
+                    {price}.00
                   </Typography>
                   <Typography sx={{ fontSize: '11px' }}>
-                    Product Type : {sale.productType}
+                    Nicotine level :{' '}
+                    {/* {nicotineLevel.map((n) => {
+                      return <Button>{n}</Button>;
+                    })} */}
                   </Typography>
                 </CardContent>
                 <CardActions>

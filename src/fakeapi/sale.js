@@ -1,35 +1,46 @@
-import voopooSamp from '../fakeapi/img/voopoo.jpg';
-import vgodSamp from '../fakeapi/img/vgod-pro.jpg';
-import smokSamp from '../fakeapi/img/smok.jpg';
+import manilaRY4 from '../fakeapi/img/manilaRY4.jpg';
+import doubleRY4 from '../fakeapi/img/doubleRY4.jpg';
+import strawberryRY4 from '../fakeapi/img/strawberryRY4.jpg';
+import pistacioRY4 from '../fakeapi/img/pistacioRY4.jpg';
+import custardRY4 from '../fakeapi/img/custardRY4.jpg';
+import vanillaWaferRY4 from '../fakeapi/img/vanillaWaferRY4.jpg';
 
 const sales = [
   {
-    item: 'Voopo Argus Pro',
-    image: voopooSamp,
-    price: 13500,
-    material: 'Stainless Steel',
-    productType: 'Pod Mod Vape',
+    flavor: 'Manila RY4',
+    nicotineLevel: [15, 20],
+    image: manilaRY4,
+    price: 200,
   },
   {
-    item: 'Vgod Pro Mech 2 kit',
-    image: vgodSamp,
-    price: 575,
-    material: 'Stainless Steel',
-    productType: 'Box Mod Vape',
+    flavor: 'Double RY4',
+    nicotineLevel: [15, 20],
+    image: doubleRY4,
+    price: 200,
   },
   {
-    item: 'SMOK Novo 2 Pod Starter Kit',
-    image: smokSamp,
-    price: 970,
-    material: 'Plastic',
-    productType: 'Pen Vape',
+    flavor: 'Pistacio RY4',
+    nicotineLevel: [15, 20],
+    image: pistacioRY4,
+    price: 200,
   },
   {
-    item: 'SMOK Novo 2 Pod Starter Kit',
-    image: smokSamp,
-    price: 970,
-    material: 'Plastic',
-    productType: 'Pen Vape',
+    flavor: 'Custard RY4',
+    nicotineLevel: [15, 20],
+    image: custardRY4,
+    price: 200,
+  },
+  {
+    flavor: 'Strawberry RY4',
+    nicotineLevel: [15, 20],
+    image: strawberryRY4,
+    price: 200,
+  },
+  {
+    flavor: 'Vanilla Wafer RY4',
+    nicotineLevel: [15, 20],
+    image: vanillaWaferRY4,
+    price: 200,
   },
 ];
 

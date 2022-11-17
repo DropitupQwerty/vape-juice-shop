@@ -13,15 +13,15 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Avatar } from '@mui/material';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 
 const drawerWidth = 240;
 
 const navItems = [
   { label: 'Home' },
-  { label: 'About' },
-  { label: 'Contact' },
-  { label: 'Account' },
+  { label: 'Cart', icon: <ShoppingCartOutlinedIcon /> },
+  { label: 'Account', icon: <PersonOutlineOutlinedIcon /> },
 ];
 
 function DrawerAppBar(props) {
@@ -75,8 +75,14 @@ function DrawerAppBar(props) {
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
-              <Button key={item.label} sx={{ color: '#fff' }}>
-                {item.label}
+              <Button
+                key={item.label}
+                sx={{
+                  color: '#fff',
+                }}
+              >
+                <Typography marginRight={0.5}>{item.label}</Typography>
+                <Typography marginTop="5px">{item?.icon}</Typography>
               </Button>
             ))}
           </Box>

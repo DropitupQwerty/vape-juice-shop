@@ -9,18 +9,16 @@ import {
   Paper,
   Typography,
   Button,
+  IconButton,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { getSales } from './../fakeapi/sale';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import global from '../styles/global';
 
 export default function Sales() {
   const [sales, setSales] = useState([]);
-  console.log(sales);
-
-  sales.map((s) => {
-    console.log(s.item);
-  });
 
   useEffect(() => {
     const itemToSell = () => {
@@ -30,6 +28,15 @@ export default function Sales() {
     itemToSell();
   }, []);
 
+  const handleAddtoCart = (id) => {
+    const salesClone = sales;
+    const index = salesClone.indexOf(id);
+    console.log(index);
+    salesClone[index] = { ...salesClone[index] };
+    salesClone[index].onCart = !salesClone[index].onCart;
+    setSales([...salesClone]);
+  };
+
   return (
     <div>
       <Paper sx={{ padding: '40px' }}>
@@ -37,7 +44,7 @@ export default function Sales() {
           {sales.map((sale) => {
             const { flavor, nicotineLevel, image, price } = sale;
             return (
-              <Grid item>
+              <Grid item key={sale.id}>
                 <Card sx={{ maxWidth: 345 }}>
                   <CardMedia
                     component="img"
@@ -61,13 +68,26 @@ export default function Sales() {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button
-                    sx={{ display: 'flex', justifyContent: 'space-around' }}
-                    fullWidth
-                  >
-                    <Typography>Buy</Typography>
-                    <ShoppingCartOutlinedIcon />
-                  </Button>
+                  {sales.onCart ? (
+                    <h2>view cart</h2>
+                  ) : (
+                    <div>
+                      <Button
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-around',
+                          ...global.btnPrimary,
+                        }}
+                        fullWidth
+                      >
+                        <Typography>Buy</Typography>
+                      </Button>
+
+                      <IconButton onClick={() => handleAddtoCart(sale?.id)}>
+                        <AddShoppingCartIcon />
+                      </IconButton>
+                    </div>
+                  )}
                 </CardActions>
               </Grid>
             );

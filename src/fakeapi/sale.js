@@ -7,43 +7,55 @@ import vanillaWaferRY4 from '../fakeapi/img/vanillaWaferRY4.jpg';
 
 const sales = [
   {
+    id: 1,
     flavor: 'Manila RY4',
     nicotineLevel: [15, 20],
     image: manilaRY4,
     price: 200,
+    onCart: false,
   },
   {
+    id: 2,
     flavor: 'Double RY4',
     nicotineLevel: [15, 20],
     image: doubleRY4,
     price: 200,
+    onCart: false,
   },
   {
+    id: 3,
     flavor: 'Pistacio RY4',
     nicotineLevel: [15, 20],
     image: pistacioRY4,
     price: 200,
+    onCart: false,
   },
   {
+    id: 4,
     flavor: 'Custard RY4',
     nicotineLevel: [15, 20],
     image: custardRY4,
     price: 200,
+    onCart: false,
   },
   {
+    id: 5,
     flavor: 'Strawberry RY4',
     nicotineLevel: [15, 20],
     image: strawberryRY4,
     price: 200,
+    onCart: false,
   },
   {
+    id: 6,
     flavor: 'Vanilla Wafer RY4',
     nicotineLevel: [15, 20],
     image: vanillaWaferRY4,
     price: 200,
+    onCart: false,
   },
 ];
 
-export function getSales() {
+export const getSales = () => {
   return sales;
-}
+};

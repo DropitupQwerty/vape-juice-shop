@@ -15,34 +15,51 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import Login from '../page/login';
+import LoginOrSignUp from '../page/LoginOrSignup';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
-const navItems = [
-  { label: 'Home' },
-  { label: 'Cart', icon: <ShoppingCartOutlinedIcon /> },
-  { label: 'Account', icon: <PersonOutlineOutlinedIcon /> },
-];
-
-function DrawerAppBar(props) {
-  const { window } = props;
+function DrawerAppBar({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
+  const handleOpen_LoginDialog = () => {
+    setOpen(true);
+  };
+  const handleClose_LoginDialog = () => {
+    setOpen(false);
+  };
+
+  const navItems = [
+    { label: 'Home', link: '/shop' },
+    { label: 'Cart', icon: <ShoppingCartOutlinedIcon />, link: '/cart' },
+    { label: 'Login/Sign Up', func: handleOpen_LoginDialog },
+  ];
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        Vape Shop
+        Vape Ph and Manufacturing
       </Typography>
       <Divider />
       <List>
         {navItems.map((item) => (
-          <ListItem key={item.label} disablePadding>
+          <ListItem key={item.label} disablePadding onClick={item.func}>
+            margin: '20px',
             <ListItemButton sx={{ textAlign: 'center' }}>
-              <ListItemText primary={item.label} />
+              <ListItemText
+                primary={
+                  <Typography sx={{ fontSize: '20px' }}>
+                    {item.label}
+                  </Typography>
+                }
+              />
             </ListItemButton>
           </ListItem>
         ))}
@@ -50,11 +67,9 @@ function DrawerAppBar(props) {
     </Box>
   );
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
-
   return (
     <Box sx={{ display: 'flex' }}>
+      <LoginOrSignUp open={open} cancel={handleClose_LoginDialog} />
       <AppBar component="nav">
         <Toolbar>
           <IconButton
@@ -69,9 +84,14 @@ function DrawerAppBar(props) {
           <Typography
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+            sx={{
+              flexGrow: 1,
+              fontWeight: 'bold',
+              fontFamily: 'monospace',
+              display: { xs: 'none', sm: 'block' },
+            }}
           >
-            Vape Shop
+            Vape Ph and Manufacturing
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {navItems.map((item) => (
@@ -79,7 +99,11 @@ function DrawerAppBar(props) {
                 key={item.label}
                 sx={{
                   color: '#fff',
+                  margin: '20px',
                 }}
+                onClick={item.func}
+                component={Link}
+                to={item?.link}
               >
                 <Typography marginRight={0.5}>{item.label}</Typography>
                 <Typography marginTop="5px">{item?.icon}</Typography>
@@ -90,7 +114,6 @@ function DrawerAppBar(props) {
       </AppBar>
       <Box component="nav">
         <Drawer
-          container={container}
           variant="temporary"
           open={mobileOpen}
           onClose={handleDrawerToggle}
@@ -108,17 +131,11 @@ function DrawerAppBar(props) {
           {drawer}
         </Drawer>
       </Box>
-      <Toolbar></Toolbar>
+      <Toolbar />
+      <Toolbar />
+      <Box sx={{ marginTop: '90px' }}>{children}</Box>
     </Box>
   );
 }
-
-DrawerAppBar.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
 
 export default DrawerAppBar;

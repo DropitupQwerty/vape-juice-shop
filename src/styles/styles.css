@@ -2,8 +2,8 @@
   background-image: url('../asests/img/banner-img.jpg');
   background-repeat: no-repeat;
   background-position: top;
-  height: 70vh;
-  width: 100%;
+  background-size: cover;
+  height: 30vh;
   border-radius: 0 0 0 50px;
 }
 
@@ -14,6 +14,5 @@
 }
 
 .content-container {
-  position: absolute;
-  bottom: -300px;
+  margin-top: 20px;
 }

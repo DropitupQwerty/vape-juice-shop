@@ -16,3 +16,29 @@
 .content-container {
   margin-top: 20px;
 }
+
+.cart-items-container {
+  width: 30%;
+  margin: 12px;
+}
+
+.cart-payment-container {
+  width: 70%;
+  margin: 12px;
+}
+
+.cart-container {
+  display: flex;
+  margin: 50px 20px;
+}
+
+.slider-container {
+  margin: 50px 20px;
+}
+
+.cart-img img {
+  height: 200px;
+  width: 200px;
+  object-fit: cover;
+  margin-right: 40px;
+}

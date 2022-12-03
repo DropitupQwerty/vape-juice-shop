@@ -44,7 +44,7 @@ const sales = [
     nicotineLevel: [15, 20],
     image: strawberryRY4,
     price: 200,
-    onCart: false,
+    onCart: true,
   },
   {
     id: 6,

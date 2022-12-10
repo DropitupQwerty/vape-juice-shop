@@ -9,6 +9,9 @@ const global = {
     margin: '10px',
     fontSize: '15px',
   },
+  addForm: {
+    margin: '10px 20px',
+  },
 };
 
 export default global;

@@ -16,9 +16,12 @@ import { getSales } from './../fakeapi/sale';
 
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import global from '../styles/global';
+import FlavorCategory from './FlavorCategory';
 
 export default function Sales() {
   const [sales, setSales] = useState([]);
+  const [category, setCategory] = useState();
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     const itemToSell = () => {
@@ -37,12 +40,31 @@ export default function Sales() {
     setSales([...salesClone]);
   };
 
+  const handleFruity = () => {
+    setCategory('Fruity');
+    setOpen(false);
+  };
+
+  const hanldePastry = () => {
+    setCategory('Pastry');
+    setOpen(false);
+  };
+
+  console.log(category);
+
   return (
     <div>
+      <FlavorCategory open={open} fruity={handleFruity} pastry={hanldePastry} />
       <Paper sx={{ padding: '40px' }}>
+        <Typography
+          variant="h4"
+          sx={{ marginBottom: '20px', fontWeight: 'bold' }}
+        >
+          {category}
+        </Typography>{' '}
         <Grid container spacing={4}>
           {sales.map((sale) => {
-            const { flavor, nicotineLevel, image, price } = sale;
+            const { flavor, image, price } = sale;
             return (
               <Grid item key={sale.id}>
                 <Card sx={{ maxWidth: 345 }}>
@@ -71,7 +93,7 @@ export default function Sales() {
                   {sales.onCart ? (
                     <h2>view cart</h2>
                   ) : (
-                    <div>
+                    <div className="btn-items">
                       <Button
                         sx={{
                           display: 'flex',

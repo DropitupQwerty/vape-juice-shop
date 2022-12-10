@@ -1,3 +1,4 @@
+import { AppBar, Toolbar } from '@mui/material';
 import React from 'react';
 import ResponsiveDrawer from '../components/navbar';
 import Sales from '../components/sales';
@@ -10,6 +11,7 @@ export default function UserHomepage() {
         <ResponsiveDrawer />
       </div>
       <div className="banner"></div>
+
       <div className="header-container">
         <div className="content-container">
           <Sales />

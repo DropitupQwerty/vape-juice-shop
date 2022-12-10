@@ -9,6 +9,10 @@ import Login from './page/login';
 import SignUp from './page/SignUp';
 import UserConfrimAge from './page/UserConfrimAge';
 import Cart from './page/Cart';
+import Sales from './page/admin/Sales';
+import Orders from './page/admin/Orders';
+import AdminDrawer from './components/AdminDrawer';
+import AdminSignIn from './page/admin/AdminSignIn';
 
 function App() {
   return (
@@ -20,6 +24,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/cart" element={<Cart />} />
+
+          <Route element={<AdminDrawer />}>
+            <Route path="/admin" element={<AdminSignIn />} />
+            <Route path="/admin/sales" element={<Sales />} />
+            <Route path="/admin/orders" element={<Orders />} />
+          </Route>
         </Routes>
       </Router>
     </ThemeProvider>

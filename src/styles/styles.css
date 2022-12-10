@@ -42,3 +42,44 @@
   object-fit: cover;
   margin-right: 40px;
 }
+
+.btn-flavor {
+  height: 100%;
+  width: 90%;
+  outline: none;
+  border: 1px solid #fff;
+  transition: 0.2s;
+  border-radius: 20px;
+  margin-top: 20px;
+}
+.btn-flavor-name {
+  color: #fff;
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.btn-fruity {
+  background: url('../asests/button-bg/fruity.webp');
+  background-size: cover;
+  font-family: 'Courier New', Courier, monospace;
+}
+.btn-pastry {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  background-image: url('../asests/button-bg/pastry.webp');
+  background-size: cover;
+}
+
+.btn-flavor:hover {
+  opacity: 60%;
+}
+
+.btn-items {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.preview-image {
+  height: 200px;
+  width: 200px;
+}

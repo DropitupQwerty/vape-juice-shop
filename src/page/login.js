@@ -4,16 +4,27 @@ import {
   Dialog,
   FormControl,
   FormGroup,
+  FormHelperText,
+  IconButton,
   OutlinedInput,
+  Paper,
+  Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import global from '../styles/global';
 import DrawerAppBar from './../components/navbar';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../service/firebase-config';
 
 export default function Login() {
   const [login, setLogin] = useState({
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const { email, password } = login;
 
@@ -25,16 +36,57 @@ export default function Login() {
     e.preventDefault();
 
     console.log('submitted');
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        sessionStorage.setItem('USER', JSON.stringify(user));
+        navigate('/shop');
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
   };
 
   return (
-    <div>
-      <DrawerAppBar />
-      <div style={{ padding: '40px', width: '400px' }}>
+    <Box
+      sx={{
+        height: '100vh',
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        postion: 'relative',
+      }}
+    >
+      <IconButton
+        sx={{ position: 'absolute', top: '20px', left: '20px', color: 'white' }}
+        component={Link}
+        to="/shop"
+      >
+        <ArrowBackIcon sx={{ fontSize: '40px' }} />
+        Back
+      </IconButton>
+
+      <Typography
+        sx={{ color: 'white', marginBottom: '20px', letterSpacing: '10px' }}
+        variant="h4"
+        fontWeight={700}
+      >
+        Vape Ph and Manufacturing
+      </Typography>
+      <Paper style={{ padding: '40px', width: '400px' }}>
+        <Typography textAlign="center" fontWeight="bold">
+          WELCOME BACK!
+        </Typography>
         <Box component="form" onSubmit={handelSubmit}>
           <FormGroup>
             <FormControl>
               <OutlinedInput
+                sx={{ ...global.addForm }}
                 placeholder="Username"
                 name="email"
                 value={email}
@@ -43,6 +95,7 @@ export default function Login() {
             </FormControl>
             <FormControl>
               <OutlinedInput
+                sx={{ ...global.addForm }}
                 placeholder="Password"
                 name="password"
                 value={password}
@@ -50,12 +103,24 @@ export default function Login() {
               />
             </FormControl>
 
-            <FormControl>
-              <Button type="submit">Login</Button>
+            <FormControl sx={{ ...global.addForm }}>
+              <Button variant="contained" type="submit">
+                Login
+              </Button>
+              <FormHelperText>
+                By clicking "Continue", you agree to our Terms and confirm
+                you're 18 years or older.
+              </FormHelperText>
             </FormControl>
+            <Typography sx={{ fonstSize: '40px', textAlign: 'center' }}>
+              Don't have an account?
+              <span>
+                <Link to="/sign-up">Sign Up</Link>
+              </span>
+            </Typography>
           </FormGroup>
         </Box>
-      </div>
-    </div>
+      </Paper>
+    </Box>
   );
 }

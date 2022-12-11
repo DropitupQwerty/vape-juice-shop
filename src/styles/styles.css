@@ -5,6 +5,7 @@
   background-size: cover;
   height: 30vh;
   border-radius: 0 0 0 50px;
+  background-attachment: fixed;
 }
 
 .header-container {
@@ -94,5 +95,18 @@
   background-image: url('../asests/img/banner-img.jpg');
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.buy-items {
+  margin: 10px 0;
+}
+
+.footer {
+  margin-top: 50px;
+  height: 100px;
+  background-image: url('../asests/img/footer.jpg');
+  object-fit: cover;
+  background-position: center;
   background-attachment: fixed;
 }

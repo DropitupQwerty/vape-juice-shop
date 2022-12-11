@@ -18,12 +18,15 @@ import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined
 import Login from '../page/login';
 import LoginOrSignUp from '../page/LoginOrSignup';
 import { Link } from 'react-router-dom';
+import { signOut } from 'firebase/auth';
 
 const drawerWidth = 240;
 
 function DrawerAppBar({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [auth, setAuth] = React.useState();
+  const [navItems, setNavitems] = React.useState([]);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -36,11 +39,35 @@ function DrawerAppBar({ children }) {
     setOpen(false);
   };
 
-  const navItems = [
+  const handleLogout = () => {
+    sessionStorage.clear();
+    signOut(auth);
+    console.log('clicekd');
+  };
+
+  const navItemsLogout = [
     { label: 'Home', link: '/shop' },
-    { label: 'Cart', icon: <ShoppingCartOutlinedIcon />, link: '/cart' },
+    // { label: 'Cart', icon: <ShoppingCartOutlinedIcon />, link: '/cart' },
     { label: 'Login/Sign Up', func: handleOpen_LoginDialog },
   ];
+
+  const navItemsLogin = [
+    { label: 'Home', link: '/shop' },
+    { label: 'Cart', icon: <ShoppingCartOutlinedIcon />, link: '/cart' },
+    { label: 'Log Out', func: handleLogout },
+  ];
+
+  React.useEffect(() => {
+    let auth = JSON.parse(sessionStorage.getItem('USER'));
+    if (!!auth) {
+      setAuth(true);
+      setNavitems(navItemsLogin);
+    } else {
+      setAuth(false);
+      setNavitems(navItemsLogout);
+    }
+    console.log(!!auth);
+  }, []);
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>

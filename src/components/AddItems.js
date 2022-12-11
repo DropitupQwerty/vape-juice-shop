@@ -26,19 +26,41 @@ import {
 } from 'firebase/firestore';
 import { db } from './../service/firebase-config';
 import { AddSubData } from '../service/firebase';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const ml = [10, 30, 60, 120];
 
 export default function AddItems({ open, cancel }) {
   const [images, setImages] = useState([]);
   const [previewImage, setPreviewImage] = useState([]);
+  const [personName, setPersonName] = React.useState([]);
   const [juice, setJuice] = useState({
     flavor: '',
     nicotinelevel: '',
-    miligram: '',
     price: '',
     category: '',
   });
+  console.log(personName);
+  const handlemenuChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(typeof value === 'string' ? value.split(',') : value);
+  };
 
-  const { flavor, nicotinelevel, miligram, price, category } = juice || {};
+  const { flavor, nicotinelevel, price, category } = juice || {};
 
   //Handle Image File
   const handleImage = (evnt) => {
@@ -70,9 +92,8 @@ export default function AddItems({ open, cancel }) {
   //Do Submit
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    await AddSubData(juice, images);
-    cancel();
+    await AddSubData(juice, personName, images);
+    // cancel();
   };
 
   //Remove Photo in UI
@@ -99,58 +120,35 @@ export default function AddItems({ open, cancel }) {
                   onChange={handleChange}
                 />
               </FormControl>
-              <FormControl sx={{ ...global.addForm }}>
-                <Typography fontWeight="bold"> Price : </Typography>
-                <OutlinedInput
-                  required
-                  startAdornment={
-                    <InputAdornment position="end">₱ </InputAdornment>
-                  }
-                  name="price"
-                  value={price}
-                  onChange={handleChange}
-                />
-              </FormControl>
-              <Box sx={{ display: 'flex' }}>
-                <FormControl sx={{ ...global.addForm }}>
-                  <Typography fontWeight="bold"> Nicotine Level : </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                <FormControl sx={{ ...global.addForm, width: '100%' }}>
+                  <Typography fontWeight="bold"> Price : </Typography>
                   <OutlinedInput
-                    endAdornment={
-                      <InputAdornment position="end">mg</InputAdornment>
+                    required
+                    startAdornment={
+                      <InputAdornment position="end">₱ </InputAdornment>
                     }
-                    name="nicotinelevel"
-                    value={nicotinelevel}
+                    name="price"
+                    value={price}
                     onChange={handleChange}
                   />
                 </FormControl>
-                <FormControl sx={{ ...global.addForm }}>
-                  <Typography fontWeight="bold"> Miligram : </Typography>
-                  <OutlinedInput
-                    id="outlined-adornment-weight"
-                    endAdornment={
-                      <InputAdornment position="end">mg</InputAdornment>
-                    }
-                    name="miligram"
-                    value={miligram}
+
+                <FormControl sx={{ ...global.addForm, width: '100%' }}>
+                  <Typography fontWeight="bold"> Juice Category: </Typography>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    // value={age}
+                    name="category"
+                    value={category}
                     onChange={handleChange}
-                  />
+                  >
+                    <MenuItem value={'Fruity'}>Fruity</MenuItem>
+                    <MenuItem value={'Pastry'}>Pastry</MenuItem>
+                  </Select>
                 </FormControl>
               </Box>
-
-              <FormControl sx={{ ...global.addForm }}>
-                <Typography fontWeight="bold"> Juice Category: </Typography>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  // value={age}
-                  name="category"
-                  value={category}
-                  onChange={handleChange}
-                >
-                  <MenuItem value={'Fruity'}>Fruity</MenuItem>
-                  <MenuItem value={'Pastry'}>Pastry</MenuItem>
-                </Select>
-              </FormControl>
 
               {previewImage.length === 0 ? (
                 <FormControl sx={{ ...global.addForm }}>
@@ -194,6 +192,41 @@ export default function AddItems({ open, cancel }) {
                   })}
                 </FormControl>
               )}
+
+              <Box sx={{ display: 'flex' }}>
+                <FormControl sx={{ ...global.addForm, width: '100%' }}>
+                  <Typography fontWeight="bold"> Nicotine Level : </Typography>
+                  <OutlinedInput
+                    endAdornment={
+                      <InputAdornment position="end">mg</InputAdornment>
+                    }
+                    name="nicotinelevel"
+                    value={nicotinelevel}
+                    onChange={handleChange}
+                  />
+                </FormControl>
+                <FormControl sx={{ ...global.addForm, width: '100%' }}>
+                  <Typography fontWeight="bold"> Mililiter : </Typography>
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
+                    value={personName}
+                    onChange={handlemenuChange}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                  >
+                    {ml.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        <Checkbox checked={personName.indexOf(name) > -1} />
+                        <ListItemText
+                          primary={<Typography>{name}ml</Typography>}
+                        />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
             </FormGroup>
           </Box>
           <div sx={{ display: 'flex', padding: '10px' }}>

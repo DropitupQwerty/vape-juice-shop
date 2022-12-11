@@ -13,6 +13,7 @@ import Sales from './page/admin/Sales';
 import Orders from './page/admin/Orders';
 import AdminDrawer from './components/AdminDrawer';
 import AdminSignIn from './page/admin/AdminSignIn';
+import Checkout from './page/Checkout';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
 
           <Route element={<AdminDrawer />}>
             <Route path="/admin" element={<AdminSignIn />} />

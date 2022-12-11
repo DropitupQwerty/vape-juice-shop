@@ -2,9 +2,11 @@ import { Box, Button, Dialog, IconButton, Typography } from '@mui/material';
 import React from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 import global from '../styles/global';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function LoginOrSignUp({ open, cancel, openLogin }) {
+  const navigate = useNavigate();
+
   return (
     <div>
       <Dialog open={open}>
@@ -20,7 +22,13 @@ export default function LoginOrSignUp({ open, cancel, openLogin }) {
             <CloseIcon sx={{ fontSize: '30px' }} />
           </IconButton>
 
-          <Button sx={{ ...global.btnPrimary }} fullWidth onClick={openLogin}>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={() => {
+              navigate('/login');
+            }}
+          >
             LOGIN
           </Button>
           <Typography

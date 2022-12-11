@@ -67,7 +67,7 @@ export default function Sales() {
   return (
     <div>
       <FlavorCategory open={open} fruity={handleFruity} pastry={hanldePastry} />
-      <Paper sx={{ padding: '40px', width: '80vw', margin: '0 40px' }}>
+      <Paper sx={{ padding: '40px', width: '80vw', margin: '0 10px' }}>
         <Typography
           sx={{
             fontSize: '40px',

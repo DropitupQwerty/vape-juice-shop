@@ -53,7 +53,7 @@ export default function UserConfrimAge() {
                 sx={{ ...global.btnSecondary }}
                 fullWidth
                 onClick={() => {
-                  navigate(-1);
+                  navigate('/google.com');
                 }}
               >
                 No

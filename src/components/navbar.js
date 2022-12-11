@@ -51,7 +51,6 @@ function DrawerAppBar({ children }) {
       <List>
         {navItems.map((item) => (
           <ListItem key={item.label} disablePadding onClick={item.func}>
-            margin: '20px',
             <ListItemButton sx={{ textAlign: 'center' }}>
               <ListItemText
                 primary={
@@ -133,7 +132,7 @@ function DrawerAppBar({ children }) {
       </Box>
       <Toolbar />
       <Toolbar />
-      <Box sx={{ marginTop: '90px' }}>{children}</Box>
+      <Box sx={{ marginTop: '85px' }}>{children}</Box>
     </Box>
   );
 }

@@ -82,4 +82,17 @@
 .preview-image {
   height: 200px;
   width: 200px;
+  object-fit: cover;
+}
+
+.sign-up {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../asests/img/banner-img.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }

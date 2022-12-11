@@ -68,7 +68,7 @@ export default function FlavorCategory({ open = true, fruity, pastry }) {
             >
               Pastry
             </Typography>
-            <button className="btn-pastry btn-flavor" onClick={fruity}></button>
+            <button className="btn-pastry btn-flavor" onClick={pastry}></button>
           </Box>
         </Box>
       </Dialog>

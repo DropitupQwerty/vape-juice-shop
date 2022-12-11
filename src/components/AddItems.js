@@ -7,14 +7,38 @@ import {
   FormControl,
   OutlinedInput,
   Typography,
+  IconButton,
+  MenuItem,
+  Select,
+  InputAdornment,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import global from './../styles/global';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  setDoc,
+  where,
+} from 'firebase/firestore';
+import { db } from './../service/firebase-config';
+import { AddSubData } from '../service/firebase';
 
 export default function AddItems({ open, cancel }) {
   const [images, setImages] = useState([]);
   const [previewImage, setPreviewImage] = useState([]);
+  const [juice, setJuice] = useState({
+    flavor: '',
+    nicotinelevel: '',
+    miligram: '',
+    price: '',
+    category: '',
+  });
+
+  const { flavor, nicotinelevel, miligram, price, category } = juice || {};
 
   //Handle Image File
   const handleImage = (evnt) => {
@@ -24,6 +48,10 @@ export default function AddItems({ open, cancel }) {
     if (targetFiles.length < 9) {
       setImages(targetFilesObject);
     }
+  };
+
+  const handleChange = (e) => {
+    setJuice({ ...juice, [e.target.name]: e.target.value });
   };
 
   //Preview image into Object Url
@@ -42,6 +70,9 @@ export default function AddItems({ open, cancel }) {
   //Do Submit
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    await AddSubData(juice, images);
+    cancel();
   };
 
   //Remove Photo in UI
@@ -56,67 +87,128 @@ export default function AddItems({ open, cancel }) {
   return (
     <div>
       <Dialog open={open}>
-        <Box sx={{ width: '500px' }}>
-          <Box component="form">
+        <Box component="form" onSubmit={handleSubmit}>
+          <Box>
             <FormGroup>
               <FormControl sx={{ ...global.addForm }}>
                 <Typography fontWeight="bold"> Juice Flavor : </Typography>
-                <OutlinedInput />
+                <OutlinedInput
+                  required
+                  name="flavor"
+                  value={flavor}
+                  onChange={handleChange}
+                />
+              </FormControl>
+              <FormControl sx={{ ...global.addForm }}>
+                <Typography fontWeight="bold"> Price : </Typography>
+                <OutlinedInput
+                  required
+                  startAdornment={
+                    <InputAdornment position="end">₱ </InputAdornment>
+                  }
+                  name="price"
+                  value={price}
+                  onChange={handleChange}
+                />
               </FormControl>
               <Box sx={{ display: 'flex' }}>
                 <FormControl sx={{ ...global.addForm }}>
                   <Typography fontWeight="bold"> Nicotine Level : </Typography>
-                  <OutlinedInput />
+                  <OutlinedInput
+                    endAdornment={
+                      <InputAdornment position="end">mg</InputAdornment>
+                    }
+                    name="nicotinelevel"
+                    value={nicotinelevel}
+                    onChange={handleChange}
+                  />
                 </FormControl>
                 <FormControl sx={{ ...global.addForm }}>
                   <Typography fontWeight="bold"> Miligram : </Typography>
-                  <OutlinedInput />
+                  <OutlinedInput
+                    id="outlined-adornment-weight"
+                    endAdornment={
+                      <InputAdornment position="end">mg</InputAdornment>
+                    }
+                    name="miligram"
+                    value={miligram}
+                    onChange={handleChange}
+                  />
                 </FormControl>
               </Box>
 
               <FormControl sx={{ ...global.addForm }}>
                 <Typography fontWeight="bold"> Juice Category: </Typography>
-                <OutlinedInput />
-              </FormControl>
-
-              <FormControl sx={{ ...global.addForm }}>
-                <Button
-                  component="label"
-                  sx={{
-                    height: '150px',
-                    width: '100px',
-                    border: '1px dashed #333',
-                    borderRadius: '20px',
-                    opacity: '40%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  // value={age}
+                  name="category"
+                  value={category}
+                  onChange={handleChange}
                 >
-                  <AddIcon fontSize="large" />
-                  <input
-                    hidden
-                    accept="image/*"
-                    multiple
-                    type="file"
-                    onChange={handleImage}
-                  />
-                </Button>
-                <Typography fontWeight="bold">Upload Image</Typography>
+                  <MenuItem value={'Fruity'}>Fruity</MenuItem>
+                  <MenuItem value={'Pastry'}>Pastry</MenuItem>
+                </Select>
               </FormControl>
 
-              <FormControl>
-                {previewImage.map((pi) => {
-                  return (
-                    <img src={pi} alt="preview" className="preview-image" />
-                  );
-                })}
-              </FormControl>
+              {previewImage.length === 0 ? (
+                <FormControl sx={{ ...global.addForm }}>
+                  <Button
+                    component="label"
+                    sx={{
+                      height: '150px',
+                      width: '100px',
+                      border: '1px dashed #333',
+                      borderRadius: '20px',
+                      opacity: '40%',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <AddIcon fontSize="large" />
+                    <input
+                      hidden
+                      accept="image/*"
+                      type="file"
+                      onChange={handleImage}
+                    />
+                  </Button>
+                  <Typography fontWeight="bold">Upload Image</Typography>
+                </FormControl>
+              ) : (
+                <FormControl sx={{ ...global.addForm }}>
+                  {previewImage.map((pi) => {
+                    return (
+                      <Box sx={{ position: 'relative', width: 200 }}>
+                        <IconButton
+                          sx={{ position: 'absolute', right: '10px' }}
+                          onClick={handleRemovePhoto}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                        <img src={pi} alt="preview" className="preview-image" />
+                      </Box>
+                    );
+                  })}
+                </FormControl>
+              )}
             </FormGroup>
           </Box>
-          <div>
-            <Button sx={{ ...global.btnPrimary }}> Add</Button>
-            <Button onClick={cancel}> Cancel</Button>
+          <div sx={{ display: 'flex', padding: '10px' }}>
+            <Button
+              sx={{ ...global.btnPrimary, width: '200px', margin: '10px 20px' }}
+              type="submit"
+            >
+              Add
+            </Button>
+            <Button
+              onClick={cancel}
+              sx={{ width: '200px', margin: '10px 20px' }}
+            >
+              Cancel
+            </Button>
           </div>
         </Box>
       </Dialog>

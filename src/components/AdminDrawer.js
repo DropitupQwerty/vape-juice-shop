@@ -103,7 +103,7 @@ function AdminDrawer({ children }) {
             <MenuIcon />
           </IconButton>
 
-          <Typography variant="h4" noWrap component="div">
+          <Typography variant="h4" noWrap component="div" textAlign="center">
             Welcome Administrator!
           </Typography>
         </Toolbar>

@@ -1,17 +1,21 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAYbzhQskUl-x8RJ0_s3wn-ujscO9jouW4',
-  authDomain: 'vape-juice-shop.firebaseapp.com',
-  projectId: 'vape-juice-shop',
-  storageBucket: 'vape-juice-shop.appspot.com',
-  messagingSenderId: '1097666772434',
-  appId: '1:1097666772434:web:86913e1e2754f474f65c0b',
-  measurementId: 'G-7VC4N4P0CX',
+  apiKey: 'AIzaSyCaoTkfo0U34NtUm1cCAO4KpRTDCQ87McU',
+  authDomain: 'realstate-online.firebaseapp.com',
+  projectId: 'realstate-online',
+  storageBucket: 'realstate-online.appspot.com',
+  messagingSenderId: '884170692779',
+  appId: '1:884170692779:web:8b6267ddcc37e6f80b7fee',
+  measurementId: 'G-04JMTDSLYF',
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+export const db = getFirestore();
 export const auth = getAuth(app);
+export const storage = getStorage(app);

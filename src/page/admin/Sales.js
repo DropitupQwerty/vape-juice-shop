@@ -12,7 +12,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import AddItems from '../../components/AddItems';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query } from 'firebase/firestore';
 import { db } from './../../service/firebase-config';
 
 export default function Sales() {

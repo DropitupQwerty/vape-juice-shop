@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Dialog,
   Box,
@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ClearIcon from '@mui/icons-material/Clear';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, updateDoc, doc } from 'firebase/firestore';
 import { db } from './../service/firebase-config';
 
 export default function BuyDialog({ open, item, cancel }) {
@@ -22,6 +22,7 @@ export default function BuyDialog({ open, item, cancel }) {
     mililiter: 0,
   });
   const [quantity, setQuantity] = useState(1);
+  const navigate = useNavigate();
   let user = JSON.parse(sessionStorage.getItem('USER'));
 
   const { mililiter } = product || {};
@@ -41,7 +42,7 @@ export default function BuyDialog({ open, item, cancel }) {
   };
 
   const handleIncrement = () => {
-    setQuantity(quantity + 1);
+    if (quantity < ml.quantity) setQuantity(quantity + 1);
   };
 
   const handleDecrement = () => {
@@ -49,14 +50,31 @@ export default function BuyDialog({ open, item, cancel }) {
   };
 
   const handleBuy = () => {
-    console.log('Clicekd');
+    sessionStorage.setItem(
+      'BUY',
+      JSON.stringify([
+        {
+          ml: product?.mililiter,
+          buyquantity: quantity,
+          ...item,
+          price: ml?.price * quantity,
+        },
+      ])
+    );
+    navigate('/checkout');
   };
 
   const handleAddtoCart = async () => {
     await addDoc(collection(db, `users/${user?.uid}/cart`), {
       ml: product?.mililiter,
-      quantity: quantity,
+      buyquantity: quantity,
       ...item,
+      price: ml?.price * quantity,
+    }).then(async (res) => {
+      await updateDoc(doc(db, `users/${user?.uid}/cart/${res.id}`), {
+        cartId: res.id,
+      });
+      navigate('/cart');
     });
   };
 
@@ -101,6 +119,14 @@ export default function BuyDialog({ open, item, cancel }) {
               </div>
               <div>
                 <Chip label={`${item?.nicotinelevel} Mg`} />
+              </div>
+              <div className="buy-items">
+                <Typography variant="h7">
+                  <b>Stocks :</b>
+                </Typography>
+              </div>
+              <div>
+                <Chip label={`${item?.quantity}`} />
               </div>
 
               <div className="buy-items">

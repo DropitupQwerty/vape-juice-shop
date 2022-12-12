@@ -17,6 +17,8 @@ import DrawerAppBar from './../components/navbar';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../service/firebase-config';
+import { getDoc, doc } from 'firebase/firestore';
+import { db } from './../service/firebase-config';
 
 export default function Login() {
   const [login, setLogin] = useState({
@@ -37,16 +39,32 @@ export default function Login() {
 
     console.log('submitted');
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
-        sessionStorage.setItem('USER', JSON.stringify(user));
+
+        await getDoc(doc(db, `users/${user.uid}`)).then((res) => {
+          console.log(res.data().role);
+
+          if (res.data().role === 'admin') {
+            sessionStorage.setItem(
+              'USER',
+              JSON.stringify({ ...user, role: res.data().role })
+            );
+          } else {
+            sessionStorage.setItem(
+              'USER',
+              JSON.stringify({ ...user, role: 'user' })
+            );
+          }
+        });
+
         navigate('/shop');
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        alert(errorCode);
       });
   };
 
@@ -100,6 +118,7 @@ export default function Login() {
                 name="password"
                 value={password}
                 onChange={handleChange}
+                type="password"
               />
             </FormControl>
 

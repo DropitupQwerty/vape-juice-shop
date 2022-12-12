@@ -18,14 +18,6 @@ export default function Orders() {
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState();
 
-  const handleOpen_Dialog = () => {
-    setOpen(true);
-  };
-
-  const handleClose_Dialog = () => {
-    setOpen(false);
-  };
-
   useEffect(() => {
     const getJuice = async () => {
       const q = query(collection(db, `orders`));
@@ -48,7 +40,7 @@ export default function Orders() {
           <TableHead>
             <TableRow>
               <TableCell>Product</TableCell>
-              <TableCell align="right">Quantity</TableCell>
+              <TableCell align="right">Contact</TableCell>
               <TableCell align="right">Name</TableCell>
               <TableCell align="right">Address</TableCell>
               {/* <TableCell align="right"></TableCell> */}
@@ -56,23 +48,35 @@ export default function Orders() {
           </TableHead>
           <TableBody>
             {items?.map((row) => {
-              let image = row.sales;
-              console.log(image?.[0].image);
+              let prod = row.sales;
+              console.log(row);
               return (
                 <TableRow
                   key={row.name}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    <img
+                    {/* <img
                       src={image?.[0].image}
                       alt={row.flavor}
                       className="preview-image"
-                    />
+                    /> */}
+                    {prod.map((prod) => {
+                      console.log(prod);
+                      return (
+                        <Typography>
+                          {prod.flavor} x {prod.quantity}
+                        </Typography>
+                      );
+                    })}
                   </TableCell>
-                  <TableCell align="right">{row.calories}</TableCell>
-                  <TableCell align="right">{row.fat}</TableCell>
-                  <TableCell align="right">{row.carbs}</TableCell>
+                  <TableCell align="right">{row.contact}</TableCell>
+                  <TableCell align="right">
+                    {row?.firstname}, {row.lastname}
+                  </TableCell>
+                  <TableCell align="right">
+                    {row.streetaddress},{row.city}
+                  </TableCell>
                   <TableCell align="right">{row.protein}</TableCell>
                 </TableRow>
               );

@@ -17,7 +17,6 @@ export default function FlavorCategory({ open = true, fruity, pastry }) {
   return (
     <div>
       <Dialog
-        open={open}
         PaperProps={{
           style: {
             border: '1px solid #333',

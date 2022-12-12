@@ -34,7 +34,6 @@ export default function SignUp() {
   };
 
   const handelSubmit = (e) => {
-    alert('Done');
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed in

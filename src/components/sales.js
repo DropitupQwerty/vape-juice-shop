@@ -12,6 +12,8 @@ import {
   IconButton,
   Divider,
   Box,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -36,21 +38,33 @@ import BuyDialog from './BuyDialog';
 
 export default function Sales() {
   const [sales, setSales] = useState();
-  const [category, setCategory] = useState();
-  const [open, setOpen] = useState(true);
+  const [category, setCategory] = useState('');
   const [openBuyDialog, setOpenBuyDialog] = useState(false);
   const [item, setItem] = useState();
   let user = JSON.parse(sessionStorage.getItem('USER'));
 
   useEffect(() => {
     const getJuice = async () => {
-      const q = query(collection(db, `juice`));
-      const acc = [];
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        acc.push(doc.data());
-      });
-      setSales(acc);
+      if (category === '') {
+        const q = query(collection(db, `juice`));
+        const acc = [];
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          acc.push(doc.data());
+        });
+        setSales(acc);
+      } else {
+        const q = query(
+          collection(db, `juice`),
+          where('category', '==', category)
+        );
+        const acc = [];
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          acc.push(doc.data());
+        });
+        setSales(acc);
+      }
     };
     getJuice();
   }, [category]);
@@ -63,25 +77,20 @@ export default function Sales() {
 
     const add = await addDoc(collection(db, `users/${user?.uid}/cart`), {
       ...item,
-      quantity: 1,
       ml: 60,
+      buyquantity: 1,
     }).then(async (res) => {
       await updateDoc(doc(db, `users/${user?.uid}/cart/${res.id}`), {
-        id: res.id,
+        cartId: res.id,
       });
     });
 
     setSales([...salesClone]);
   };
 
-  const handleFruity = () => {
-    setCategory('Fruity');
-    setOpen(false);
-  };
-
-  const hanldePastry = () => {
-    setCategory('Pastry');
-    setOpen(false);
+  const handleChange = (e, cat) => {
+    setCategory(cat);
+    console.log(cat);
   };
 
   const handleOpenBuyDialog = (item) => {
@@ -95,23 +104,33 @@ export default function Sales() {
 
   return (
     <div>
-      <FlavorCategory open={open} fruity={handleFruity} pastry={hanldePastry} />
       <BuyDialog
         open={openBuyDialog}
         item={item}
         cancel={handleCloseBuyDialog}
       />
-      <Paper sx={{ padding: '40px', width: '80vw', margin: '0 10px' }}>
-        <Typography
-          sx={{
-            fontSize: '40px',
-            marginBottom: '20px',
-            fontWeight: 'bold',
-            textAlign: 'center',
-          }}
+      <Paper
+        sx={{
+          padding: '40px',
+          width: '80vw',
+          margin: '0 10px',
+          minHeight: '800px',
+        }}
+      >
+        <ToggleButtonGroup
+          sx={{ display: 'flex', alignItems: 'center', margin: '10px' }}
+          value={category}
+          exclusive
+          onChange={handleChange}
         >
-          {category}
-        </Typography>
+          <Typography fontWeight={700} margin={2}>
+            JUICE FLAVOR:{' '}
+          </Typography>
+          <ToggleButton value={'Fruity'}>FRUITY</ToggleButton>
+          <ToggleButton value={'Pastry'}>PASTRY</ToggleButton>
+          <ToggleButton value={''}>ALL</ToggleButton>
+        </ToggleButtonGroup>
+
         <Divider />
         <Grid container spacing={1} sx={{ marginTop: '10px' }}>
           {sales?.map((sale) => {

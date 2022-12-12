@@ -14,6 +14,7 @@ import Orders from './page/admin/Orders';
 import AdminDrawer from './components/AdminDrawer';
 import AdminSignIn from './page/admin/AdminSignIn';
 import Checkout from './page/Checkout';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
@@ -27,8 +28,8 @@ function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
 
+          <Route path="/admin" element={<AdminSignIn />} />
           <Route element={<AdminDrawer />}>
-            <Route path="/admin" element={<AdminSignIn />} />
             <Route path="/admin/sales" element={<Sales />} />
             <Route path="/admin/orders" element={<Orders />} />
           </Route>

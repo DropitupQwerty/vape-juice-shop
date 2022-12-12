@@ -17,6 +17,7 @@ import {
   addDoc,
   updateDoc,
   doc,
+  getDoc,
 } from 'firebase/firestore';
 import { db } from './../service/firebase-config';
 import LoaderDialog from '../components/LoaderDialog';
@@ -26,6 +27,7 @@ export default function Checkout() {
   const [sales, setSales] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   let user = JSON.parse(sessionStorage.getItem('USER'));
+  let buy = JSON.parse(sessionStorage.getItem('BUY'));
   const [order, setOrder] = useState({
     firstname: '',
     lastname: '',
@@ -33,9 +35,10 @@ export default function Checkout() {
     province: '',
     contact: '',
     email: '',
+    city: '',
   });
 
-  const { firstname, lastname, streetaddress, province, contact, email } =
+  const { city, firstname, lastname, streetaddress, province, contact, email } =
     order || {};
 
   useEffect(() => {
@@ -50,34 +53,59 @@ export default function Checkout() {
     };
     getCart();
   }, []);
-  let sum = sales.reduce((a, v) => (a = a + parseInt(v.price)), 0);
+  let sum = buy?.reduce((a, v) => (a = a + parseInt(v.price)), 0);
 
   const handleChange = (e) => {
     setOrder({ ...order, [e.target.name]: e.target.value });
   };
 
-  const handleBuy = async () => {
+  const handleBuy = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
 
-    await addDoc(collection(db, 'orders'), {
-      ...order,
-      sales,
-    })
-      .then(async (res) => {
-        await updateDoc(doc(`orders/${res.id}`), {
-          id: res.id,
+    if (buy) {
+      sales.map(async (s) => {
+        console.log(s);
+        await getDoc(doc(db, `juice/${s.id}`)).then(async (res) => {
+          console.log(res.data());
+
+          await updateDoc(doc(db, `juice/${s.id}`), {
+            quantity: parseInt(res.data().quantity) - parseInt(s.quantity),
+          });
         });
-        setIsLoading(false);
-        setOrder({
-          firstname: '',
-          lastname: '',
-          streetaddress: '',
-          province: '',
-          contact: '',
-          email: '',
-        });
+      });
+
+      await addDoc(collection(db, 'orders'), {
+        ...order,
+        sales,
       })
-      .catch((e) => [setIsLoading(false)]);
+        .then(async (res) => {
+          await updateDoc(doc(`orders/${res.id}`), {
+            id: res.id,
+          });
+          setIsLoading(false);
+          setOrder({
+            firstname: '',
+            lastname: '',
+            streetaddress: '',
+            province: '',
+            contact: '',
+            email: '',
+            city: '',
+          });
+          sessionStorage.removeItem('BUY');
+        })
+        .catch((e) => [setIsLoading(false)]);
+      setIsLoading(false);
+      sessionStorage.removeItem('BUY');
+    } else {
+      setIsLoading(false);
+      alert('No Product');
+    }
+  };
+
+  const removeItem = () => {
+    sessionStorage.removeItem('BUY');
   };
 
   return (
@@ -105,7 +133,7 @@ export default function Checkout() {
             CHECKOUT DETAILS
           </Typography>
           <Box sx={{ width: '95%', marginTop: '40px' }}>
-            <Box>
+            <Box component="form" onSubmit={handleBuy}>
               <FormGroup>
                 <div>
                   <Typography fontWeight="bold"> BILLING & SHIPPING</Typography>
@@ -138,6 +166,16 @@ export default function Checkout() {
                       name="streetaddress"
                       placeholder="eg. Pulo"
                       value={streetaddress}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormControl>
+                  <FormControl sx={{ ...global.addForm }} fullWidth>
+                    <Typography>City</Typography>
+                    <OutlinedInput
+                      name="city"
+                      placeholder="eg. Candaba"
+                      value={city}
                       onChange={handleChange}
                       required
                     />
@@ -179,10 +217,10 @@ export default function Checkout() {
 
                 <div>
                   <Typography fontWeight="bold">YOUR ORDERS</Typography>
-                  {sales.map((i) => {
+                  {buy?.map((i) => {
                     return (
                       <Typography fontWeight="bold" sx={{ ...global.addForm }}>
-                        {i?.flavor} x {i?.quantity}
+                        {i?.flavor} x {i?.buyquantity}
                       </Typography>
                     );
                   })}
@@ -192,12 +230,17 @@ export default function Checkout() {
                 </div>
                 <div>
                   <FormControl sx={{ ...global.addForm }} fullWidth>
-                    <Button variant="contained" onClick={handleBuy}>
+                    <Button variant="contained" type="submit">
                       PLACE ORDER
                     </Button>
                   </FormControl>
                   <FormControl sx={{ ...global.addForm }} fullWidth>
-                    <Button variant="outlined" component={Link} to="/shop">
+                    <Button
+                      variant="outlined"
+                      component={Link}
+                      to="/shop"
+                      onClick={removeItem}
+                    >
                       BACK
                     </Button>
                   </FormControl>

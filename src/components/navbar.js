@@ -17,7 +17,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import Login from '../page/login';
 import LoginOrSignUp from '../page/LoginOrSignup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 
 const drawerWidth = 240;
@@ -27,6 +27,8 @@ function DrawerAppBar({ children }) {
   const [open, setOpen] = React.useState(false);
   const [auth, setAuth] = React.useState();
   const [navItems, setNavitems] = React.useState([]);
+  const navigate = useNavigate();
+  let token = JSON.parse(sessionStorage.getItem('USER'));
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -58,15 +60,13 @@ function DrawerAppBar({ children }) {
   ];
 
   React.useEffect(() => {
-    let auth = JSON.parse(sessionStorage.getItem('USER'));
-    if (!!auth) {
+    if (!!token) {
       setAuth(true);
       setNavitems(navItemsLogin);
     } else {
       setAuth(false);
       setNavitems(navItemsLogout);
     }
-    console.log(!!auth);
   }, []);
 
   const drawer = (
@@ -120,6 +120,18 @@ function DrawerAppBar({ children }) {
             Vape Ph and Manufacturing
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+            {token?.role === 'admin' ? (
+              <Button
+                sx={{
+                  color: '#fff',
+                  margin: '20px',
+                }}
+                component={Link}
+                to={'/admin/sales'}
+              >
+                <Typography marginRight={0.5}>Go to Admin Dashboard</Typography>
+              </Button>
+            ) : null}
             {navItems.map((item) => (
               <Button
                 key={item.label}

@@ -29,10 +29,13 @@ export default function Cart() {
 
   const handleDelete = async (item) => {
     console.log(item);
-    const deleteAccount = sales.filter((a) => a.id !== item);
+    const deleteAccount = sales.filter((a) => a.cartId !== item);
     setSales(deleteAccount);
-
     deleteDoc(doc(db, `users/${user.uid}/cart/${item}`));
+  };
+
+  const addToSession = () => {
+    sessionStorage.setItem('BUY', JSON.stringify(sales));
   };
 
   return (
@@ -92,7 +95,7 @@ export default function Cart() {
                   <Typography fontWeight={700}>{s.flavor}</Typography>
                 </div>
                 <div>
-                  <Typography fontWeight={700}>{s.quantity}</Typography>
+                  <Typography fontWeight={700}>{s.buyquantity}</Typography>
                 </div>
                 <div>
                   <Typography fontWeight={700}>₱{s.price}</Typography>
@@ -102,7 +105,7 @@ export default function Cart() {
                     fontWeight={700}
                     sx={{ color: '#fff', background: '#B33A3A' }}
                     onClick={() => {
-                      handleDelete(s.id);
+                      handleDelete(s.cartId);
                     }}
                   >
                     Delete
@@ -142,6 +145,7 @@ export default function Cart() {
               sx={{ margin: '20px 0' }}
               component={Link}
               to="/checkout"
+              onClick={addToSession}
             >
               Place order
             </Button>

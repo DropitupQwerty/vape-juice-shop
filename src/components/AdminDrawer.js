@@ -15,14 +15,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import GroupsIcon from '@mui/icons-material/Groups';
 import ViewListIcon from '@mui/icons-material/ViewList';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { signOut } from 'firebase/auth';
+import { auth } from '../service/firebase-config';
 
 const drawerWidth = 240;
 
 function AdminDrawer({ children }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  const navigate = useNavigate();
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -41,6 +43,13 @@ function AdminDrawer({ children }) {
       icon: <GroupsIcon sx={{ fontSize: '20px' }} />,
     },
   ];
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    signOut(auth);
+    navigate('/shop');
+    console.log('clicekd');
+  };
 
   const drawer = (
     <div>
@@ -67,7 +76,7 @@ function AdminDrawer({ children }) {
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton component={Link} to={'/admin'}>
+          <ListItemButton onClick={handleLogout}>
             <ListItemIcon>
               <LogoutIcon sx={{ fontSize: '20px' }} />
             </ListItemIcon>

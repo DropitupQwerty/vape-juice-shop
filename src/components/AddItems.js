@@ -28,6 +28,7 @@ import { db } from './../service/firebase-config';
 import { AddSubData } from '../service/firebase';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
+import { useNavigate } from 'react-router-dom';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -40,17 +41,19 @@ const MenuProps = {
   },
 };
 
-const ml = [10, 30, 60, 120];
+const ml = [10, 30, 65, 120];
 
 export default function AddItems({ open, cancel }) {
   const [images, setImages] = useState([]);
   const [previewImage, setPreviewImage] = useState([]);
   const [personName, setPersonName] = React.useState([]);
+  const navigate = useNavigate();
   const [juice, setJuice] = useState({
     flavor: '',
     nicotinelevel: '',
     price: '',
     category: '',
+    quantity: '',
   });
   console.log(personName);
   const handlemenuChange = (event) => {
@@ -60,7 +63,7 @@ export default function AddItems({ open, cancel }) {
     setPersonName(typeof value === 'string' ? value.split(',') : value);
   };
 
-  const { flavor, nicotinelevel, price, category } = juice || {};
+  const { flavor, nicotinelevel, price, category, quantity } = juice || {};
 
   //Handle Image File
   const handleImage = (evnt) => {
@@ -94,6 +97,14 @@ export default function AddItems({ open, cancel }) {
     event.preventDefault();
     await AddSubData(juice, personName, images);
     // cancel();
+    setJuice({
+      flavor: '',
+      nicotinelevel: '',
+      price: '',
+      category: '',
+      quantity: '',
+    });
+    navigate('/admin/sales');
   };
 
   //Remove Photo in UI
@@ -120,9 +131,19 @@ export default function AddItems({ open, cancel }) {
                   onChange={handleChange}
                 />
               </FormControl>
+              <FormControl sx={{ ...global.addForm }}>
+                <Typography fontWeight="bold"> Quantity : </Typography>
+                <OutlinedInput
+                  required
+                  name="quantity"
+                  value={quantity}
+                  onChange={handleChange}
+                  type="number"
+                />
+              </FormControl>
               <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                 <FormControl sx={{ ...global.addForm, width: '100%' }}>
-                  <Typography fontWeight="bold"> Price : </Typography>
+                  <Typography fontWeight="bold"> Price/pc : </Typography>
                   <OutlinedInput
                     required
                     startAdornment={

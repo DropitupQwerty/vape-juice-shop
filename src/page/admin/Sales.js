@@ -55,10 +55,11 @@ export default function Sales() {
             <TableRow>
               <TableCell></TableCell>
               <TableCell>Juice</TableCell>
+              <TableCell>Quantity</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Nicotine Level</TableCell>
               <TableCell>Juice Category</TableCell>
-              <TableCell>Mg</TableCell>
+              <TableCell>Militer</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -75,10 +76,15 @@ export default function Sales() {
                   />
                 </TableCell>
                 <TableCell>{row.flavor}</TableCell>
+                <TableCell>{row.quantity}</TableCell>
                 <TableCell> ₱ {row.price}</TableCell>
                 <TableCell>{row.nicotinelevel} mg</TableCell>
                 <TableCell>{row.category} </TableCell>
-                <TableCell>{row.miligram} mg </TableCell>
+                <TableCell>
+                  {row.mililiter?.map((ml) => {
+                    return <Typography>{ml} ML,</Typography>;
+                  })}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

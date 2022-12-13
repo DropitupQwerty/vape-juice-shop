@@ -105,7 +105,7 @@ export default function Login() {
             <FormControl>
               <OutlinedInput
                 sx={{ ...global.addForm }}
-                placeholder="Username"
+                placeholder="Email Address"
                 name="email"
                 value={email}
                 onChange={handleChange}

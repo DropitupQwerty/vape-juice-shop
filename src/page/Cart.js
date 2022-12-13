@@ -72,9 +72,10 @@ export default function Cart() {
             >
               Shopping Cart
             </Typography>
-            <Typography fontWeight={700}>Flavor</Typography>
+            <Typography fontWeight={700}>Product</Typography>
             <Typography fontWeight={700}>Quantity</Typography>
             <Typography fontWeight={700}>Price</Typography>
+
             <Typography fontWeight={700}>Delete</Typography>
           </Paper>
           {sales.map((s) => {
@@ -92,7 +93,9 @@ export default function Cart() {
                   <img src={s.image} alt={s.flavor} />
                 </div>
                 <div>
-                  <Typography fontWeight={700}>{s.flavor}</Typography>
+                  <Typography fontWeight={700}>
+                    {s.flavor}x{s.mg}MG x {s.ml}ML
+                  </Typography>
                 </div>
                 <div>
                   <Typography fontWeight={700}>{s.buyquantity}</Typography>
@@ -100,6 +103,7 @@ export default function Cart() {
                 <div>
                   <Typography fontWeight={700}>₱{s.price}</Typography>
                 </div>
+
                 <div>
                   <Button
                     fontWeight={700}

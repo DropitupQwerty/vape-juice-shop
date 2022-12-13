@@ -40,6 +40,8 @@ export default function Orders() {
           <TableHead>
             <TableRow>
               <TableCell>Product</TableCell>
+              <TableCell>Nicotine Level</TableCell>
+              <TableCell>Mililiter</TableCell>
               <TableCell align="right">Contact</TableCell>
               <TableCell align="right">Name</TableCell>
               <TableCell align="right">Address</TableCell>
@@ -65,9 +67,21 @@ export default function Orders() {
                       console.log(prod);
                       return (
                         <Typography>
-                          {prod.flavor} x {prod.quantity}
+                          {prod.flavor} x {prod.buyquantity}
                         </Typography>
                       );
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {prod.map((prod) => {
+                      console.log(prod);
+                      return <Typography>{prod?.mg}Mg</Typography>;
+                    })}
+                  </TableCell>
+                  <TableCell>
+                    {prod.map((prod) => {
+                      console.log(prod);
+                      return <Typography>{prod?.ml}ML</Typography>;
                     })}
                   </TableCell>
                   <TableCell align="right">{row.contact}</TableCell>

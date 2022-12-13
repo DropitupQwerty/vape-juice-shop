@@ -78,6 +78,7 @@ export default function Sales() {
     const add = await addDoc(collection(db, `users/${user?.uid}/cart`), {
       ...item,
       ml: 60,
+      mg: 15,
       buyquantity: 1,
     }).then(async (res) => {
       await updateDoc(doc(db, `users/${user?.uid}/cart/${res.id}`), {
@@ -147,28 +148,31 @@ export default function Sales() {
                   />
 
                   <CardContent>
+                    <Typography sx={{ fontSize: '17px', fontWeight: 'bold' }}>
+                      Flavor: {flavor}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: '17px',
+                        fontWeight: 'bold',
+                        marginBottom: '12px',
+                      }}
+                    >
+                      Price : {price}.00
+                    </Typography>
                     <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
-                      {flavor}
+                      Nicotine level :
                     </Typography>
-                    <Typography sx={{ fontSize: '13px', fontWeight: 'bold' }}>
-                      {price}.00
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '13px',
-                        marginTop: '5px',
-                        fontWeight: '700',
-                      }}
-                    >
-                      Nicotine level : {nicotinelevel} mg
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: '13px',
-                        marginTop: '5px',
-                        fontWeight: '700',
-                      }}
-                    >
+                    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                      {nicotinelevel?.map((mg) => {
+                        return (
+                          <Typography sx={{ fontSize: '13px' }}>
+                            {mg} Mg ,
+                          </Typography>
+                        );
+                      })}
+                    </Box>
+                    <Typography sx={{ fontSize: '14px', fontWeight: 'bold' }}>
                       ML :
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row' }}>

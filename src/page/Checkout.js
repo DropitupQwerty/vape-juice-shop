@@ -70,14 +70,14 @@ export default function Checkout() {
           console.log(res.data());
 
           await updateDoc(doc(db, `juice/${s.id}`), {
-            quantity: parseInt(res.data().quantity) - parseInt(s.quantity),
+            quantity: parseInt(res.data().quantity) - parseInt(s.buyquantity),
           });
         });
       });
 
       await addDoc(collection(db, 'orders'), {
         ...order,
-        sales,
+        sales: buy,
       })
         .then(async (res) => {
           await updateDoc(doc(`orders/${res.id}`), {

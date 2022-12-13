@@ -20,12 +20,13 @@ export default function BuyDialog({ open, item, cancel }) {
   const [ml, setMl] = useState([]);
   const [product, setProduct] = useState({
     mililiter: 0,
+    nicotinelevel: 0,
   });
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   let user = JSON.parse(sessionStorage.getItem('USER'));
 
-  const { mililiter } = product || {};
+  const { mililiter, nicotinelevel } = product || {};
 
   useEffect(() => {
     const getItem = () => {
@@ -39,6 +40,10 @@ export default function BuyDialog({ open, item, cancel }) {
   const handleMLChange = (e, ml) => {
     setProduct({ ...product, mililiter: ml });
     console.log(product);
+  };
+
+  const handleMgChange = (e, mg) => {
+    setProduct({ ...product, nicotinelevel: mg });
   };
 
   const handleIncrement = () => {
@@ -55,6 +60,7 @@ export default function BuyDialog({ open, item, cancel }) {
       JSON.stringify([
         {
           ml: product?.mililiter,
+          mg: product?.nicotinelevel,
           buyquantity: quantity,
           ...item,
           price: ml?.price * quantity,
@@ -64,9 +70,44 @@ export default function BuyDialog({ open, item, cancel }) {
     navigate('/checkout');
   };
 
+  const add = (value) => {
+    const { price } = item || {};
+    return parseInt(price) + value;
+  };
+
+  const f = () => {
+    const { price } = item || {};
+
+    if (mililiter === 30 && nicotinelevel === 15)
+      setMl({ ...ml, price: price });
+    else if (mililiter === 30 && nicotinelevel === 25)
+      setMl({ ...ml, price: add(50) });
+    else if (mililiter === 30 && nicotinelevel === 50)
+      setMl({ ...ml, price: add(100) });
+    else if (mililiter === 50 && nicotinelevel === 15)
+      setMl({ ...ml, price: add(60) });
+    else if (mililiter === 50 && nicotinelevel === 25)
+      setMl({ ...ml, price: add(110) });
+    else if (mililiter === 50 && nicotinelevel === 50)
+      setMl({ ...ml, price: add(160) });
+    else if (mililiter === 65 && nicotinelevel === 15)
+      setMl({ ...ml, price: add(100) });
+    else if (mililiter === 65 && nicotinelevel === 25)
+      setMl({ ...ml, price: add(150) });
+    else if (mililiter === 65 && nicotinelevel === 50)
+      setMl({ ...ml, price: add(210) });
+  };
+
+  console.log(ml);
+
+  useEffect(() => {
+    f();
+  }, [product]);
+
   const handleAddtoCart = async () => {
     await addDoc(collection(db, `users/${user?.uid}/cart`), {
       ml: product?.mililiter,
+      mg: product?.nicotinelevel,
       buyquantity: quantity,
       ...item,
       price: ml?.price * quantity,
@@ -110,24 +151,38 @@ export default function BuyDialog({ open, item, cancel }) {
           <div>
             <div className="buy-items">
               <Typography variant="h6">
-                <b>Price:</b> ₱{item?.price}
+                <b>Price:</b> ₱{ml?.price}
               </Typography>
               <div className="buy-items">
                 <Typography variant="h7">
                   <b>Nicotine Level:</b>
                 </Typography>
               </div>
-              <div>
-                <Chip label={`${item?.nicotinelevel} Mg`} />
-              </div>
-              <div className="buy-items">
+
+              {ml?.nicotinelevel?.map((mg) => {
+                return (
+                  <ToggleButtonGroup
+                    name="mililiter"
+                    value={nicotinelevel}
+                    onChange={handleMgChange}
+                    exclusive
+                    sx={{ margin: ' 5px 0' }}
+                  >
+                    <ToggleButton sx={{ margin: '0 5px' }} value={parseInt(mg)}>
+                      {`${mg} Mg`}
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                );
+              })}
+
+              {/* <div className="buy-items">
                 <Typography variant="h7">
                   <b>Stocks :</b>
                 </Typography>
               </div>
               <div>
                 <Chip label={`${item?.quantity}`} />
-              </div>
+              </div> */}
 
               <div className="buy-items">
                 <div>
@@ -169,7 +224,11 @@ export default function BuyDialog({ open, item, cancel }) {
                   {quantity && <Button disabled>{quantity}</Button>}
                   {quantity && <Button onClick={handleDecrement}>-</Button>}
                 </ButtonGroup>
-                <div></div>
+                <div>
+                  <Typography variant="h7">
+                    <b>Available : </b> {ml?.quantity} pcs
+                  </Typography>
+                </div>
               </div>
             </div>
           </div>

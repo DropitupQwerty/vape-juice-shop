@@ -78,7 +78,11 @@ export default function Sales() {
                 <TableCell>{row.flavor}</TableCell>
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell> ₱ {row.price}</TableCell>
-                <TableCell>{row.nicotinelevel} mg</TableCell>
+                <TableCell>
+                  {row?.nicotinelevel?.mililiter?.map((mg) => {
+                    return <Typography>{mg} Mg,</Typography>;
+                  })}
+                </TableCell>
                 <TableCell>{row.category} </TableCell>
                 <TableCell>
                   {row.mililiter?.map((ml) => {

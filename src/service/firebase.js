@@ -9,11 +9,12 @@ import {
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { db, storage } from './firebase-config';
 
-export const AddSubData = async (inputs, ml, images) => {
+export const AddSubData = async (inputs, ml, images, nicotinelevel) => {
   if (images.length !== 0) {
     await addDoc(collection(db, `/juice`), {
       ...inputs,
       mililiter: ml,
+      nicotinelevel: nicotinelevel,
       timestamp: serverTimestamp(),
     }).then((docRef) => {
       return uploadMultipleImage(images, docRef.id).then((r) => {

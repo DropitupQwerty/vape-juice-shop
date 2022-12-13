@@ -41,16 +41,17 @@ const MenuProps = {
   },
 };
 
-const ml = [10, 30, 65, 120];
+const ml = [30, 50, 65];
+const mg = [15, 25, 50];
 
 export default function AddItems({ open, cancel }) {
   const [images, setImages] = useState([]);
   const [previewImage, setPreviewImage] = useState([]);
   const [personName, setPersonName] = React.useState([]);
+  const [nicotinelevel, setNicotineLevel] = React.useState([]);
   const navigate = useNavigate();
   const [juice, setJuice] = useState({
     flavor: '',
-    nicotinelevel: '',
     price: '',
     category: '',
     quantity: '',
@@ -62,8 +63,14 @@ export default function AddItems({ open, cancel }) {
     } = event;
     setPersonName(typeof value === 'string' ? value.split(',') : value);
   };
+  const handleMgChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setNicotineLevel(typeof value === 'string' ? value.split(',') : value);
+  };
 
-  const { flavor, nicotinelevel, price, category, quantity } = juice || {};
+  const { flavor, price, category, quantity } = juice || {};
 
   //Handle Image File
   const handleImage = (evnt) => {
@@ -95,7 +102,7 @@ export default function AddItems({ open, cancel }) {
   //Do Submit
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await AddSubData(juice, personName, images);
+    await AddSubData(juice, personName, images, nicotinelevel);
     // cancel();
     setJuice({
       flavor: '',
@@ -217,14 +224,24 @@ export default function AddItems({ open, cancel }) {
               <Box sx={{ display: 'flex' }}>
                 <FormControl sx={{ ...global.addForm, width: '100%' }}>
                   <Typography fontWeight="bold"> Nicotine Level : </Typography>
-                  <OutlinedInput
-                    endAdornment={
-                      <InputAdornment position="end">mg</InputAdornment>
-                    }
-                    name="nicotinelevel"
+                  <Select
+                    labelId="demo-multiple-checkbox-label"
+                    id="demo-multiple-checkbox"
+                    multiple
                     value={nicotinelevel}
-                    onChange={handleChange}
-                  />
+                    onChange={handleMgChange}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                  >
+                    {mg?.map((name) => (
+                      <MenuItem key={name} value={name}>
+                        <Checkbox checked={nicotinelevel.indexOf(name) > -1} />
+                        <ListItemText
+                          primary={<Typography>{name}mg</Typography>}
+                        />
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
                 <FormControl sx={{ ...global.addForm, width: '100%' }}>
                   <Typography fontWeight="bold"> Mililiter : </Typography>
@@ -237,7 +254,7 @@ export default function AddItems({ open, cancel }) {
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
                   >
-                    {ml.map((name) => (
+                    {ml?.map((name) => (
                       <MenuItem key={name} value={name}>
                         <Checkbox checked={personName.indexOf(name) > -1} />
                         <ListItemText

@@ -14,7 +14,6 @@ import Orders from './page/admin/Orders';
 import AdminDrawer from './components/AdminDrawer';
 import AdminSignIn from './page/admin/AdminSignIn';
 import Checkout from './page/Checkout';
-import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (

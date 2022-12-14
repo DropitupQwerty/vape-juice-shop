@@ -53,7 +53,7 @@ export default function UserConfrimAge() {
                 sx={{ ...global.btnSecondary }}
                 fullWidth
                 onClick={() => {
-                  navigate('/google.com');
+                  window.location.replace('https://www.google.com/');
                 }}
               >
                 No

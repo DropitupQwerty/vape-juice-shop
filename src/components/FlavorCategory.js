@@ -22,6 +22,7 @@ export default function FlavorCategory({ open = true, fruity, pastry }) {
             border: '1px solid #333',
           },
         }}
+        open={open}
       >
         <Typography
           variant="h4"

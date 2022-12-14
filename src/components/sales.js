@@ -41,6 +41,7 @@ export default function Sales() {
   const [category, setCategory] = useState('');
   const [openBuyDialog, setOpenBuyDialog] = useState(false);
   const [item, setItem] = useState();
+  const [open, setOpen] = useState(true);
   let user = JSON.parse(sessionStorage.getItem('USER'));
 
   useEffect(() => {
@@ -103,8 +104,19 @@ export default function Sales() {
     setOpenBuyDialog(false);
   };
 
+  const fruity = () => {
+    setCategory('Fruity');
+    setOpen(false);
+  };
+
+  const pastry = () => {
+    setCategory('Pastry');
+    setOpen(false);
+  };
+
   return (
     <div>
+      <FlavorCategory open={open} fruity={fruity} pastry={pastry} />
       <BuyDialog
         open={openBuyDialog}
         item={item}

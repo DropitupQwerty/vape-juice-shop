@@ -59,7 +59,7 @@ export default function Sales() {
               <TableCell>Price</TableCell>
               <TableCell>Nicotine Level</TableCell>
               <TableCell>Juice Category</TableCell>
-              <TableCell>Militer</TableCell>
+              <TableCell>Mililiter</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -79,7 +79,7 @@ export default function Sales() {
                 <TableCell>{row.quantity}</TableCell>
                 <TableCell> ₱ {row.price}</TableCell>
                 <TableCell>
-                  {row?.nicotinelevel?.mililiter?.map((mg) => {
+                  {row?.nicotinelevel?.map((mg) => {
                     return <Typography>{mg} Mg,</Typography>;
                   })}
                 </TableCell>

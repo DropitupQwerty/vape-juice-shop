@@ -19,7 +19,7 @@ import { db } from './../service/firebase-config';
 export default function BuyDialog({ open, item, cancel }) {
   const [ml, setMl] = useState([]);
   const [product, setProduct] = useState({
-    mililiter: 0,
+    mililiter: 30,
     nicotinelevel: 0,
   });
   const [quantity, setQuantity] = useState(1);
